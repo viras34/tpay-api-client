@@ -86,7 +86,6 @@ class Client
 
         try {
             $response = $this->client->request($method, $endpoint, $options);
-            $this->validateResponseIp($response);
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $this->handleException($e);
         }
