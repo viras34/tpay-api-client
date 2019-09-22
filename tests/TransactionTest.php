@@ -40,43 +40,25 @@ final class TransactionTest extends TestCase
         return $response;
     }
 
-//    public function testBlik(): void
-//    {
-//        $client = $this->getClient();
-//        $response = $this->create($client);
-//        $body = [
-//            'title'=>$response->title,
-//            'code'=>'123456',
-//            'amount' => 999.99,
-//        ];
-//
-//        $response = $client->transaction->blik($body);
-//
-//
-//        $this->assertIsObject($response);
-//
-//        $this->assertObjectHasAttribute('result', $response);
-//
-//        $this->assertSame(1, $response->result);
-//    }
+    public function testBlik(): void
+    {
+        $client = $this->getClient();
+        $response = $this->create($client);
+        $body = [
+            'title'=>$response->title,
+            'code'=>'123456',
+            'amount' => 999.99,
+        ];
 
-//    public function testGet(): void
-//    {
-//        $client = $this->getClient();
-//        $body = [
-//            'title'=>'TR-BRA-KGZK0X',
-//        ];
-//
-//        $response = $client->transaction->get($body);
-//
-//        $this->assertIsObject($response);
-//
-//        $this->assertObjectHasAttribute('result', $response);
-//        $this->assertObjectHasAttribute('status', $response);
-//
-//        $this->assertSame(1, $response->result);
-//        $this->assertSame('correct', $response->status);
-//    }
+        $response = $client->transaction->blik($body);
+
+
+        $this->assertIsObject($response);
+
+        $this->assertObjectHasAttribute('result', $response);
+
+        $this->assertSame(1, $response->result);
+    }
 
     public function testGet(): void
     {
@@ -95,7 +77,6 @@ final class TransactionTest extends TestCase
         $this->assertSame(1, $response->result);
         $this->assertSame('correct', $response->status);
     }
-
 
     private function getClient()
     {
