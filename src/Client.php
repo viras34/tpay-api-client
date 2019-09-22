@@ -69,11 +69,11 @@ class Client
     {
         $data['json'] = true;
         $options = [
-            'on_stats' => function ($stats) {
-                if ($stats->hasResponse()) {
-                    $stats->getResponse()->stats = $stats;
-                }
-            }
+//            'on_stats' => function ($stats) {
+//                if ($stats->hasResponse()) {
+//                    $stats->getResponse()->stats = $stats;
+//                }
+//            }
         ];
         switch ($method) {
             case 'GET':
@@ -92,20 +92,6 @@ class Client
         }
 
         return $this->handleResponse($response);
-    }
-
-    /**
-     * @param Response $response
-     * @throws ClientException
-     */
-    private function validateResponseIp(Response $response)
-    {
-        $stats = $response->stats->getHandlerStats();
-        print_r($stats);
-        $ip = $stats['primary_ip'];
-
-        if(!in_array($ip, $this->secureIpTable))
-            throw new ClientException('Not secure response IP address.');
     }
 
     /**
