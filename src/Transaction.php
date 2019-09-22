@@ -1,6 +1,8 @@
 <?php
 namespace Viras\Tpay;
 
+use \stdClass;
+
 /**
  * Class Transaction
  * @package Viras\Tpay
@@ -22,10 +24,10 @@ class Transaction
      * @link https://docs.tpay.com/#!/Transaction_API/post_api_gw_api_key_transaction_create
      *
      * @param array $data
-     * @return \stdClass
+     * @return stdClass
      * @throws ClientException
      */
-    public function create(array $data): \stdClass
+    public function create(array $data): stdClass
     {
         $crc = isset($data['crc']) ? $data['crc'] : '';
         $data['md5sum'] = md5($data['merchantId'] . $data['amount'] . $crc . $data['merchantSecret']);
@@ -33,7 +35,7 @@ class Transaction
 
         $response = $this->client->request('POST', 'transaction/create', $data);
 
-        return $response;
+        return $this->checkResponseHasErrors($response);
     }
 
     /**
@@ -41,14 +43,14 @@ class Transaction
      * @link https://docs.tpay.com/#!/Transaction_API/post_api_gw_api_key_transaction_blik
      *
      * @param array $data
-     * @return \stdClass
+     * @return stdClass
      * @throws ClientException
      */
-    public function blik(array $data): \stdClass
+    public function blik(array $data): stdClass
     {
         $response = $this->client->request('POST', 'transaction/blik', $data);
 
-        return $response;
+        return $this->checkResponseHasErrors($response);
     }
 
     /**
@@ -56,27 +58,40 @@ class Transaction
      * @link https://docs.tpay.com/#!/Transaction_API/post_api_gw_api_key_transaction_get
      *
      * @param array $data
-     * @return \stdClass
+     * @return stdClass
      * @throws ClientException
      */
-    public function get(array $data): \stdClass
+    public function get(array $data): stdClass
     {
         $response = $this->client->request('POST', 'transaction/get', $data);
 
-        return $response;
+        return $this->checkResponseHasErrors($response);
     }
 
+//    /**
+//     * @TODO
+//     * This method returns payments report for the declared time range, generated in CSV format
+//     * @link https://docs.tpay.com/#!/Transaction_API/post_api_gw_api_key_transaction_report
+//     *
+//     * @param array $data
+//     * @return stdClass
+//     * @throws  \Exception
+//     */
+//    public function report(array $data): stdClass
+//    {
+//        throw new \Exception('Not implemented.');
+//    }
+
     /**
-     * @TODO
-     * This method returns payments report for the declared time range, generated in CSV format
-     * @link https://docs.tpay.com/#!/Transaction_API/post_api_gw_api_key_transaction_report
-     *
-     * @param array $data
-     * @return \stdClass
-     * @throws  \Exception
+     * @param stdClass $response
+     * @return stdClass
+     * @throws ClientException
      */
-    public function report(array $data): \stdClass
+    private function checkResponseHasErrors(stdClass $response)
     {
-        throw new \Exception('Not implemented.');
+        if(!$response->result)
+            throw new ClientException(TransactionApiError::getDescription($response->err) . ' : ' . $response->desc);
+
+        return $response;
     }
 }

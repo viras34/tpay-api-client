@@ -5,13 +5,14 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Psr7\Response;
 use function GuzzleHttp\Psr7\stream_for;
 use UnexpectedValueException;
+use \stdClass;
 
 class Client
 {
-    private $secureIpTable = [
-        '195.149.229.109', '148.251.96.163', '178.32.201.77',
-        '46.248.167.59', '46.29.19.106', '176.119.38.175'
-    ];
+//    private $secureIpTable = [
+//        '195.149.229.109', '148.251.96.163', '178.32.201.77',
+//        '46.248.167.59', '46.29.19.106', '176.119.38.175'
+//    ];
 
     /**
      * @var string HTTP method used to fetch access tokens.
@@ -63,7 +64,6 @@ class Client
      * @param array $data
      * @return mixed
      * @throws ClientException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function request($method, $endpoint, $data = [])
     {
@@ -104,20 +104,8 @@ class Client
     }
 
     /**
-     * @param \GuzzleHttp\Exception\ClientException $e
-     * @throws ClientException
-     */
-    private function handleException(\GuzzleHttp\Exception\ClientException $e)
-    {
-        $stream = stream_for($e->getResponse()->getBody());
-        $details = $this->parseJson($stream);
-        throw new ClientException($details->error->detail, $e->getCode(), $details);
-    }
-
-    /**
      * @param $content
-     * @return mixed
-     * @throws ClientException
+     * @return stdClass
      */
     private function parseJson($content)
     {
@@ -129,9 +117,6 @@ class Client
                 json_last_error_msg()
             ));
         }
-
-        if(!$content->result)
-            throw new ClientException($content->desc);
 
         return $content;
     }
