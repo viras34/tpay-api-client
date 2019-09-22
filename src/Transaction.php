@@ -1,6 +1,10 @@
 <?php
 namespace Viras\Tpay;
 
+/**
+ * Class Transaction
+ * @package Viras\Tpay
+ */
 class Transaction
 {
     /**

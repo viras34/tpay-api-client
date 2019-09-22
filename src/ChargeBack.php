@@ -1,6 +1,10 @@
 <?php
 namespace Viras\Tpay;
 
+/**
+ * Class ChargeBack
+ * @package Viras\Tpay
+ */
 class ChargeBack
 {
     /**
