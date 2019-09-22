@@ -87,7 +87,7 @@ class Client
         try {
             $response = $this->client->request($method, $endpoint, $options);
         } catch (\GuzzleHttp\Exception\ClientException $e) {
-            $this->handleException($e);
+            throw new ClientException($e->getMessage());
         }
 
         return $this->handleResponse($response);
@@ -114,6 +114,11 @@ class Client
         throw new ClientException($details->error->detail, $e->getCode(), $details);
     }
 
+    /**
+     * @param $content
+     * @return mixed
+     * @throws ClientException
+     */
     private function parseJson($content)
     {
         $content = json_decode($content, false);
@@ -124,6 +129,9 @@ class Client
                 json_last_error_msg()
             ));
         }
+
+        if(!$content->result)
+            throw new ClientException($content->desc);
 
         return $content;
     }
