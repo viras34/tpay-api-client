@@ -51,7 +51,7 @@ final class TransactionTest extends TestCase
         ];
 
         $response = $client->transaction->blik($body);
-
+        print_r($response); exit;
 
         $this->assertIsObject($response);
 
