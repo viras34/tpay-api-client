@@ -3,7 +3,7 @@ namespace Viras\Tpay;
 
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Psr7\Response;
-use function GuzzleHttp\Psr7\stream_for;
+use GuzzleHttp\Psr7\Utils;
 use UnexpectedValueException;
 use \stdClass;
 
@@ -120,7 +120,7 @@ class Client
      */
     private function handleResponse(Response $response)
     {
-        $stream = stream_for($response->getBody());
+        $stream = Utils::streamFor($response->getBody());
         return $this->parseJson($stream);
     }
 
