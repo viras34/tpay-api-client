@@ -103,6 +103,9 @@ class Client
     {
         $client = new GuzzleClient([
             'base_uri' => 'https://secure.tpay.com',
+            'headers' => [
+                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36',
+            ],
         ]);
 
         try {
