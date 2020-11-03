@@ -95,11 +95,12 @@ class Client
 
     /**
      * @param int $merchantId
+     * @param bool $onlyAvailable
      * @return array
      * @throws ClientException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getBankGroups(int $merchantId): array
+    public function getBankGroups(int $merchantId, bool $onlyAvailable=true ): array
     {
         $client = new GuzzleClient([
             'base_uri' => 'https://secure.tpay.com',
@@ -108,8 +109,10 @@ class Client
             ],
         ]);
 
+        $available = (int) $onlyAvailable;
+
         try {
-            $response = $client->request('GET', "groups-{$merchantId}.js?json");
+            $response = $client->request('GET', "groups-{$merchantId}{$available}.js?json");
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             throw new ClientException($e->getMessage());
         }
