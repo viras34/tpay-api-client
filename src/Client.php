@@ -63,7 +63,7 @@ class Client
      * @param $endpoint
      * @param array $data
      * @return mixed
-     * @throws ClientException
+     * @throws ClientException|\GuzzleHttp\Exception\GuzzleException
      */
     public function request($method, $endpoint, $data = [])
     {
@@ -91,6 +91,27 @@ class Client
         }
 
         return $this->handleResponse($response);
+    }
+
+    /**
+     * @param int $merchantId
+     * @return array
+     * @throws ClientException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getBankGroups(int $merchantId): array
+    {
+        $client = new GuzzleClient([
+            'base_uri' => 'https://secure.tpay.com',
+        ]);
+
+        try {
+            $response = $client->request('GET', "groups-{$merchantId}.js?json");
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            throw new ClientException($e->getMessage());
+        }
+
+        return json_decode((string)$response->getBody(), true);
     }
 
     /**
