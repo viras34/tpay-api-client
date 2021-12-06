@@ -30,7 +30,8 @@ class Transaction
     public function create(array $data): stdClass
     {
         $crc = isset($data['crc']) ? $data['crc'] : '';
-        $data['md5sum'] = md5($data['merchantId'] . $data['amount'] . $crc . $data['merchantSecret']);
+//        $data['md5sum'] = md5($data['merchantId'] . $data['amount'] . $crc . $data['merchantSecret']);
+        $data['md5sum'] = md5("{$data['merchantId']}&{$data['amount']}&{$crc}&{$data['merchantSecret']}");
         $data['id'] = $data['merchantId'];
 
         $response = $this->client->request('POST', 'transaction/create', $data);
